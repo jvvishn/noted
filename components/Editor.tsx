@@ -15,7 +15,6 @@ export default function Editor() {
 
   useEditorChange((editor) => {
     localStorage.setItem("noteData", JSON.stringify(editor.document));
-    console.log("saved: ", editor.document);
   }, editor);
 
   return <BlockNoteView editor={editor} theme="dark" />;
