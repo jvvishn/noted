@@ -4,18 +4,21 @@ import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { useCreateBlockNote, useEditorChange } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
+import { Note } from "@/types/types";
+import { Block } from "@blocknote/core";
 
-export default function Editor() {
-  const saved = typeof window !== "undefined" ? localStorage.getItem("noteData") : null;
-  const initialData = saved ? JSON.parse(saved) : undefined;
-
+export default function Editor({ note, onContentChange }: { note: Note | undefined; onContentChange: (content: Block[]) => void }) {
   const editor = useCreateBlockNote({
-    initialContent: initialData,
+  initialContent: note?.content.length ? note.content : undefined
   });
 
   useEditorChange((editor) => {
-    localStorage.setItem("noteData", JSON.stringify(editor.document));
+    onContentChange(editor.document);
   }, editor);
+
+  if (!note) {
+    return <div>Select a note</div>;
+  }
 
   return <BlockNoteView editor={editor} theme="dark" />;
 }
