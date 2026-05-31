@@ -18,7 +18,7 @@ export default function NoteLayout() {
   const handleCreateNote = () => {
     const newNote: Note = {
       id: crypto.randomUUID(),
-      title: "New Note",
+      title: "",
       content: [],
     };
     setNotes([...notes, newNote]);

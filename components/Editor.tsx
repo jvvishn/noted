@@ -21,9 +21,9 @@ export default function Editor({note, onContentChange, onTitleChange,}: { note: 
   }
 
   return (
-    <div>
-      <input value={note.title} onChange={(e) => onTitleChange(e.target.value)} />
-      <BlockNoteView editor={editor} theme="dark" />
+    <div className="h-full p-8 overflow-y-auto">
+      <input className="font-bold text-3xl border-none outline-none bg-transparent text-white w-full mb-4" placeholder="Untitled" value={note.title} onChange={(e) => onTitleChange(e.target.value)} />
+      <BlockNoteView editor={editor} theme="dark" className="px-3 py-2" />
     </div>
   );
 }
