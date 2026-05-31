@@ -1,18 +1,17 @@
 "use client";
 
 import { Note } from "@/types/types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import DynamicEditor from "./DynamicEditor";
 import Sidebar from "./Sidebar";
 import { Block } from "@blocknote/core";
 
 export default function NoteLayout() {
-  console.log("NoteLayout rendering");
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleSelectNote = (id: string) => {
-    console.log("Selected note ID:", id);
     setSelectedNoteId(id);
   };
 
@@ -27,11 +26,14 @@ export default function NoteLayout() {
   };
 
   const handleContentChange = (content: Block[]) => {
-    setNotes(
-      notes.map((note) =>
-        note.id === selectedNoteId ? { ...note, content } : note,
-      ),
-    );
+    clearTimeout(saveTimeoutRef.current);
+    saveTimeoutRef.current = setTimeout(() => {
+      setNotes(
+        notes.map((note) =>
+          note.id === selectedNoteId ? { ...note, content } : note,
+        ),
+      );
+    }, 500);
   };
 
   useEffect(() => {
