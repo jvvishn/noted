@@ -44,6 +44,20 @@ export default function NoteLayout() {
     );
   };
 
+  const handleDeleteNote = (id: string) => {
+    const index = notes.findIndex((note) => note.id === id);
+
+    if (notes.length === 1) {
+      setSelectedNoteId(null);
+    } else if (index === 0) {
+      setSelectedNoteId(notes[index + 1].id);
+    } else {
+      setSelectedNoteId(notes[Math.max(0, index - 1)].id);
+    }
+
+    setNotes(notes.filter((note) => note.id !== id));
+  };
+
   useEffect(() => {
     typeof window !== "undefined" &&
       localStorage.getItem("notes") &&
@@ -63,6 +77,7 @@ export default function NoteLayout() {
           selectedNoteId={selectedNoteId}
           onSelectNote={handleSelectNote}
           onCreateNote={handleCreateNote}
+          onDeleteNote={handleDeleteNote}
         />
       </div>
       <div className="flex-1 bg-neutral-950">

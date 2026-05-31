@@ -1,12 +1,14 @@
 "use client";
 
 import { Note } from "@/types/types";
+import { Trash2 } from "lucide-react";
 
 interface SidebarProps {
   notes: Note[];
   selectedNoteId: string | null;
   onSelectNote: (id: string) => void;
   onCreateNote: () => void;
+  onDeleteNote: (id: string) => void;
 }
 
 export default function Sidebar({
@@ -14,6 +16,7 @@ export default function Sidebar({
   selectedNoteId,
   onSelectNote,
   onCreateNote,
+  onDeleteNote,
 }: SidebarProps) {
   return (
     <div className="flex flex-col h-full p-4">
@@ -27,13 +30,23 @@ export default function Sidebar({
       <ul>
         {notes.map((note) => (
           <li
-            className={`w-full px-3 py-2 rounded-md cursor-pointer hover:bg-neutral-700 ${note.id === selectedNoteId ? "bg-neutral-800" : ""}`}
+            className={`group w-full flex items-center justify-between px-3 py-2 rounded-md cursor-pointer hover:bg-neutral-700 ${note.id === selectedNoteId ? "bg-neutral-800" : ""}`}
             key={note.id}
             onClick={() => {
               onSelectNote(note.id);
             }}
           >
-            {note.title}
+            <span className="truncate flex-1"> {note.title} </span>
+            <button
+              className="opacity-0 group-hover:opacity-100"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDeleteNote(note.id);
+              }}
+            >
+              {" "}
+              <Trash2 size={14} />{" "}
+            </button>
           </li>
         ))}
       </ul>
