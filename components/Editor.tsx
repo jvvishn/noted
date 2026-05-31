@@ -7,9 +7,9 @@ import { BlockNoteView } from "@blocknote/mantine";
 import { Note } from "@/types/types";
 import { Block } from "@blocknote/core";
 
-export default function Editor({ note, onContentChange }: { note: Note | undefined; onContentChange: (content: Block[]) => void }) {
+export default function Editor({note, onContentChange, onTitleChange,}: { note: Note | undefined; onContentChange: (content: Block[]) => void; onTitleChange: (title: string) => void;}) {
   const editor = useCreateBlockNote({
-  initialContent: note?.content.length ? note.content : undefined
+    initialContent: note?.content.length ? note.content : undefined,
   });
 
   useEditorChange((editor) => {
@@ -20,5 +20,10 @@ export default function Editor({ note, onContentChange }: { note: Note | undefin
     return <div>Select a note</div>;
   }
 
-  return <BlockNoteView editor={editor} theme="dark" />;
+  return (
+    <div>
+      <input value={note.title} onChange={(e) => onTitleChange(e.target.value)} />
+      <BlockNoteView editor={editor} theme="dark" />
+    </div>
+  );
 }

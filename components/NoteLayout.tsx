@@ -36,6 +36,14 @@ export default function NoteLayout() {
     }, 500);
   };
 
+  const handleTitleChange = (title: string) => {
+    setNotes(
+      notes.map((note) =>
+        note.id === selectedNoteId ? { ...note, title } : note,
+      ),
+    );
+  };
+
   useEffect(() => {
     typeof window !== "undefined" &&
       localStorage.getItem("notes") &&
@@ -62,6 +70,7 @@ export default function NoteLayout() {
           key={selectedNoteId}
           note={selectedNote}
           onContentChange={handleContentChange}
+          onTitleChange={handleTitleChange}
         />
       </div>
     </div>
