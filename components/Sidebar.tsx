@@ -3,6 +3,7 @@
 import { Note } from "@/types/types";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
 
 interface SidebarProps {
   notes: Note[];
@@ -21,13 +22,21 @@ export default function Sidebar({
 }: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const filteredNotes = notes.filter((note) =>
-    note.title.toLowerCase().includes(searchQuery.toLowerCase())
+    note.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
     <div className="flex flex-col h-full p-4">
-      <h1 className="text-white font-semibold mb-4 text-2xl">Noted.</h1>
-      <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search..." className="mb-4 p-2 rounded-md bg-neutral-800 text-white border-none outline-none" />
+      <div className="flex items-center gap-2 mb-4">
+        <Image src="/notedicon.png" alt="Noted Icon" width={32} height={32} />
+        <h1 className="text-white font-semibold text-2xl">Noted.</h1>
+      </div>
+      <input
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search..."
+        className="mb-4 p-2 rounded-md bg-neutral-800 text-white border-none outline-none"
+      />
       <button
         className="w-full py-2 bg-neutral-700 rounded-md text-white cursor-pointer hover:bg-neutral-600 mb-4"
         onClick={onCreateNote}
