@@ -36,7 +36,7 @@ export default function Sidebar({
               onSelectNote(note.id);
             }}
           >
-            <span className="truncate flex-1"> {note.title} </span>
+            <span className="truncate flex-1"> {note.title || "Untitled"} </span>
             <button
               className="opacity-0 group-hover:opacity-100"
               onClick={(e) => {

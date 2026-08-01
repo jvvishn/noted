@@ -16,13 +16,27 @@ export default function Editor({note, onContentChange, onTitleChange,}: { note: 
     onContentChange(editor.document);
   }, editor);
 
+  const handleExport = async () => {
+    const markdown = await editor.blocksToMarkdownLossy(editor.document);
+    const blob = new Blob([markdown], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = (note.title || "untitled") + ".md";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   if (!note) {
     return <div>Select a note</div>;
   }
 
   return (
     <div className="h-full p-8 overflow-y-auto">
-      <input className="font-bold text-3xl border-none outline-none bg-transparent text-white w-full mb-4" placeholder="Untitled" value={note.title} onChange={(e) => onTitleChange(e.target.value)} />
+      <div className="flex items-center mb-4">
+        <input className="font-bold text-3xl border-none outline-none bg-transparent text-white w-full" placeholder="Untitled" value={note.title} onChange={(e) => onTitleChange(e.target.value)} />
+        <button onClick={handleExport}>Export</button>
+      </div>
       <BlockNoteView editor={editor} theme="dark" className="px-3 py-2" />
     </div>
   );
