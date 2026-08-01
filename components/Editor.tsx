@@ -66,8 +66,12 @@ export default function Editor({
           value={note.title}
           onChange={(e) => onTitleChange(e.target.value)}
         />
-        <button onClick={handleExport}>Export</button>
-        <button onClick={handlePDFExport}>Export PDF</button>
+        <button onClick={handleExport} className="ml-2 px-3 py-1 bg-neutral-700 text-white text-sm rounded-md hover:bg-neutral-600 cursor-pointer">
+          Export Markdown
+        </button>
+        <button onClick={handlePDFExport} className="ml-2 px-3 py-1 bg-neutral-700 text-white text-sm rounded-md hover:bg-neutral-600 cursor-pointer">
+          Export PDF
+        </button>
       </div>
       <BlockNoteView editor={editor} theme="dark" className="px-3 py-2" />
     </div>
