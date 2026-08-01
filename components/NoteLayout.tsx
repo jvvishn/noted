@@ -10,6 +10,8 @@ export default function NoteLayout() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNoteId, setSelectedNoteId] = useState<string | null>(null);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [sidebarWidth, setSidebarWidth] = useState(256);
+  const isResizingRef = useRef(false);
 
   const handleSelectNote = (id: string) => {
     setSelectedNoteId(id);
@@ -58,20 +60,42 @@ export default function NoteLayout() {
     setNotes(notes.filter((note) => note.id !== id));
   };
 
+  const handleMouseDown = () => {
+    isResizingRef.current = true;
+  }
+
   useEffect(() => {
-    typeof window !== "undefined" &&
-      localStorage.getItem("notes") &&
-      setNotes(JSON.parse(localStorage.getItem("notes")!));
-  }, []);
+  const saved = localStorage.getItem("notes");
+  if (saved) setNotes(JSON.parse(saved));
+}, []);
 
   useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes]);
   const selectedNote = notes.find((note) => note.id === selectedNoteId);
 
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizingRef.current) return;
+      setSidebarWidth(Math.max(150, Math.min(500, e.clientX)));
+    };
+
+    const handleMouseUp = () => {
+      isResizingRef.current = false;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
   return (
     <div className="flex h-screen">
-      <div className="w-64 bg-neutral-900">
+      <div className="bg-neutral-900" style={{ width: sidebarWidth }}>
         <Sidebar
           notes={notes}
           selectedNoteId={selectedNoteId}
@@ -80,6 +104,7 @@ export default function NoteLayout() {
           onDeleteNote={handleDeleteNote}
         />
       </div>
+      <div className="w-1 cursor-col-resize bg-neutral-700 hover:bg-blue-500 transition-colors" onMouseDown={handleMouseDown}/>
       <div className="flex-1 bg-neutral-950">
         <DynamicEditor
           key={selectedNoteId}
