@@ -23,7 +23,6 @@ export default function Sidebar({
   const filteredNotes = notes.filter((note) =>
     note.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  console.log("query:", searchQuery, "filtered:", filteredNotes.length);
 
   return (
     <div className="flex flex-col h-full p-4">
