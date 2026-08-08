@@ -54,7 +54,11 @@ export default function Editor({
   };
 
   if (!note) {
-    return <div>Select a note</div>;
+    return <div className="bg-neutral-950 flex items-center justify-center h-full p-16">
+      <div className="bg-neutral-900 rounded-4xl flex flex-col gap-4 w-full h-full items-center justify-center">
+        <div className="text-2xl font-semibold text-neutral-400">Select or create a note.</div>
+      </div>
+    </div>
   }
 
   return (
